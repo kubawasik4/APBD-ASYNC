@@ -10,6 +10,7 @@ public interface IWarehouseRepository
     public Task<bool> CheckWarehouseExist(int idWarehouse);
     public Task<bool> CheckOrderExist(int idProduct, DateTime createdAt);
     public Task<bool> CheckOrderInProductWarehouse(int idOrder);
+    public Task UpdateFulfilledAt(int idOrder);
 
 }
 
@@ -81,6 +82,19 @@ public class WarehouseRepository : IWarehouseRepository
         var counter = (int)await cmd.ExecuteScalarAsync();
         if (counter > 0) return true;
         return false;
+    }
+    public async Task UpdateFulfilledAt(int idOrder)
+    {
+        await using var connection = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await connection.OpenAsync();
+        
+        await using var transaction = await connection.BeginTransactionAsync();
+        var query = "UPDATE Order SET FulfilledAt = @FulfilledAt WHERE IdOrder = @IdOrder";
+        await using var cmd = new SqlCommand(query);
+        cmd.Transaction = (SqlTransaction)transaction;
+        cmd.Parameters.AddWithValue("@IdOrder", idOrder);
+        cmd.Parameters.AddWithValue("@FulfilledAt", DateTime.UtcNow);
+        await cmd.ExecuteNonQueryAsync();
     }
     
     public async Task<int?> RegisterProductInWarehouseAsync(int idWarehouse, int idProduct, int idOrder,
