@@ -1,4 +1,5 @@
 ﻿using WebApplication2.Dto;
+using WebApplication2.Repositores;
 
 namespace WebApplication2.Services;
 public interface IWarehouseService
@@ -8,7 +9,6 @@ public interface IWarehouseService
 public class WarehouseService : IWarehouseService
 {
     private readonly IWarehouseRepository _warehouseRepository;
-    // private readonly IProductRepository _productRepository;
     public WarehouseService(IWarehouseRepository warehouseRepository)
     {
         _warehouseRepository = warehouseRepository;
