@@ -1,4 +1,6 @@
-﻿using WebApplication2.Dto;
+﻿using System.Data.SqlClient;
+using System.Xml;
+using WebApplication2.Dto;
 using WebApplication2.Repositores;
 
 namespace WebApplication2.Services;
@@ -17,6 +19,6 @@ public class WarehouseService : IWarehouseService
     public async Task<int> RegisterProductInWarehouseAsync(RegisterProductInWarehouseRequestDTO dto)
     {
 
-        
+        return;
     }
 }
