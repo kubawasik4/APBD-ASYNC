@@ -9,6 +9,7 @@ public interface IWarehouseRepository
     public Task<bool> CheckProductExist(int idProduct);
     public Task<bool> CheckWarehouseExist(int idWarehouse);
     public Task<bool> CheckOrderExist(int idProduct, DateTime createdAt);
+    public Task<bool> CheckOrderInProductWarehouse(int idOrder);
 
 }
 
@@ -63,6 +64,20 @@ public class WarehouseRepository : IWarehouseRepository
         cmd.Transaction = (SqlTransaction)transaction;
         cmd.Parameters.AddWithValue("@IdProduct", idProduct);
         cmd.Parameters.AddWithValue("@CreatedAt", createdAt);
+        var counter = (int)await cmd.ExecuteScalarAsync();
+        if (counter > 0) return true;
+        return false;
+    }
+    public async Task<bool> CheckOrderInProductWarehouse(int idOrder)
+    {
+        await using var connection = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await connection.OpenAsync();
+        
+        await using var transaction = await connection.BeginTransactionAsync();
+        var query = "SELECT COUNT(*) FROM Product_Warehouse WHERE IdOrder = @IdOrder";
+        await using var cmd = new SqlCommand(query);
+        cmd.Transaction = (SqlTransaction)transaction;
+        cmd.Parameters.AddWithValue("@IdOrder", idOrder);
         var counter = (int)await cmd.ExecuteScalarAsync();
         if (counter > 0) return true;
         return false;
