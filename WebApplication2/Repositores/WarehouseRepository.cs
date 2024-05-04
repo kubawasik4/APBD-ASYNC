@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data;
+using System.Data.SqlClient;
 
 namespace WebApplication2.Repositores;
 public interface IWarehouseRepository
@@ -155,7 +156,16 @@ public class WarehouseRepository : IWarehouseRepository
 
     public async Task RegisterProductInWarehouseByProcedureAsync(int idWarehouse, int idProduct, DateTime createdAt)
     {
-        return;
+        await using var connection = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await connection.OpenAsync();
+        
+        await using var cmd = new SqlCommand("AddProductToWarehouse", connection);
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.Parameters.AddWithValue("IdProduct", idProduct);
+        cmd.Parameters.AddWithValue("IdWarehouse",idWarehouse);
+        cmd.Parameters.AddWithValue("Amount", 0);
+        cmd.Parameters.AddWithValue("CreatedAt", createdAt);
+        await cmd.ExecuteNonQueryAsync();
     }
 
 }
