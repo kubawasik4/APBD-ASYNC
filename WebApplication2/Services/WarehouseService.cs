@@ -18,7 +18,6 @@ public class WarehouseService : IWarehouseService
     
     public async Task<int> RegisterProductInWarehouseAsync(RegisterProductInWarehouseRequestDTO dto)
     {
-
         return;
     }
 }

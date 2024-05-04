@@ -120,7 +120,37 @@ public class WarehouseRepository : IWarehouseRepository
     public async Task<int?> RegisterProductInWarehouseAsync(int idWarehouse, int idProduct, int idOrder,
         DateTime createdAt)
     {
-        return null;
+        await using var connection = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
+        await connection.OpenAsync();
+    
+        await using var transaction = await connection.BeginTransactionAsync();
+        try
+        {
+
+            if (!await CheckProductExist(idProduct))
+                throw new Exception("produkt o tym id nie istnieje");
+
+            if (!await CheckWarehouseExist(idWarehouse))
+                throw new Exception("warehouse o tym id nie istnieje");
+
+            if (!await CheckOrderExist(idProduct, createdAt))
+                throw new Exception("zamowienie z tym id nie istnieje");
+
+            if (!await CheckOrderInProductWarehouse(idOrder))
+                throw new Exception("zamowienie zostalo zrealizowane");
+
+            await UpdateFulfilledAt(idOrder);
+
+            var id = await InsertProductWarehouse(idWarehouse, idProduct, idOrder, createdAt);
+
+            await transaction.CommitAsync();
+            return id;
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            return null;
+        }
     }
 
     public async Task RegisterProductInWarehouseByProcedureAsync(int idWarehouse, int idProduct, DateTime createdAt)
