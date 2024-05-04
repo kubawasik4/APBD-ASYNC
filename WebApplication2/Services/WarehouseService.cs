@@ -18,6 +18,13 @@ public class WarehouseService : IWarehouseService
     
     public async Task<int> RegisterProductInWarehouseAsync(RegisterProductInWarehouseRequestDTO dto)
     {
-        return;
+        const int idOrder = 1;
+        var idProductWarehouse = await _warehouseRepository.RegisterProductInWarehouseAsync(idWarehouse: dto.IdWarehouse!.Value, idProduct: dto.IdProduct!.Value,
+            idOrder: idOrder, createdAt: DateTime.UtcNow);
+
+        if (!idProductWarehouse.HasValue)
+            throw new Exception("nie udalo sie dodac produktu");
+
+        return idProductWarehouse.Value;
     }
 }
