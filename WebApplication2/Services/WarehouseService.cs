@@ -7,6 +7,7 @@ namespace WebApplication2.Services;
 public interface IWarehouseService
 {
     public Task<int> RegisterProductInWarehouseAsync(RegisterProductInWarehouseRequestDTO dto);
+    public Task<int> RegisterProductInWarehouseByProcedureAsync(RegisterProductInWarehouseRequestDTO dto);
 }
 public class WarehouseService : IWarehouseService
 {
