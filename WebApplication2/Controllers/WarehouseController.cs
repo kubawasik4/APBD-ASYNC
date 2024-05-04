@@ -32,4 +32,19 @@ public class WarehouseController : ControllerBase
         }
         
     }
+    [HttpPost]
+    public async Task<IActionResult> RegisterProductInWarehouseStoredProcAsync([FromBody] RegisterProductInWarehouseRequestDTO dto)
+    {
+        try
+        {
+            var idProductWarehouse = await _warehouseService.RegisterProductInWarehouseByProcedureAsync(dto);
+          
+            return Ok(idProductWarehouse);
+            
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
 }
