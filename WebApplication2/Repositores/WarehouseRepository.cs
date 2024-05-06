@@ -7,13 +7,6 @@ public interface IWarehouseRepository
     public Task<int?> RegisterProductInWarehouseAsync(int idWarehouse, int idProduct, int idOrder, DateTime createdAt);
     public Task RegisterProductInWarehouseByProcedureAsync(int idWarehouse, int idProduct, DateTime createdAt);
 
-    public Task<bool> CheckProductExist(int idProduct);
-    public Task<bool> CheckWarehouseExist(int idWarehouse);
-    public Task<bool> CheckOrderExist(int idProduct, DateTime createdAt);
-    public Task<bool> CheckOrderInProductWarehouse(int idOrder);
-    public Task UpdateFulfilledAt(int idOrder);
-    public Task<int?> InsertProductWarehouse(int idWarehouse, int idProduct, int idOrder, DateTime createdAt);
-
 }
 
 public class WarehouseRepository : IWarehouseRepository
