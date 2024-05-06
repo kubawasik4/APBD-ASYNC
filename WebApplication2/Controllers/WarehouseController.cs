@@ -33,7 +33,7 @@ public class WarehouseController : ControllerBase
         
     }
     [HttpPost]
-    public async Task<IActionResult> RegisterProductInWarehouseStoredProcAsync([FromBody] RegisterProductInWarehouseRequestDTO dto)
+    public async Task<IActionResult> RegisterProductInWarehouseByProcedureAsync([FromBody] RegisterProductInWarehouseRequestDTO dto)
     {
         try
         {

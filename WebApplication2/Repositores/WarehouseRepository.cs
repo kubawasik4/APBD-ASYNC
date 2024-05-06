@@ -166,6 +166,7 @@ public class WarehouseRepository : IWarehouseRepository
         cmd.Parameters.AddWithValue("Amount", 0);
         cmd.Parameters.AddWithValue("CreatedAt", createdAt);
         await cmd.ExecuteNonQueryAsync();
+        
     }
 
 }
